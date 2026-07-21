@@ -84,6 +84,12 @@ class PatientData(BaseModel):
     ]
 
 
+
+
+
+
+
+
 class Prediction(BaseModel):
     result: Annotated[
         Literal["Diabetic", "Non-Diabetic"],
@@ -110,6 +116,12 @@ class Prediction(BaseModel):
             examples=[91.45]
         )
     ]
+
+
+
+
+
+
 
 
 class PredictionResponse(BaseModel):

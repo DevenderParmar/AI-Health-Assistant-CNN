@@ -2,6 +2,8 @@ import joblib
 import numpy as np
 import tensorflow as tf
 from fastapi import HTTPException
+import traceback
+
 
 from app.config.settings import MODEL_PATH, SCALER_PATH
 
@@ -46,12 +48,10 @@ def predict_diabetes(patient):
             "prediction": {
                 "result": result,
                 "risk_level": risk_level,
-                "confidence": f"{confidence * 100:.2f}%"
+                "confidence": round(confidence * 100, 2)
             },
             "message": message
         }
     except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail=f"Prediction failed: {str(e)}"
-        )
+        traceback.print_exc()
+        raise
