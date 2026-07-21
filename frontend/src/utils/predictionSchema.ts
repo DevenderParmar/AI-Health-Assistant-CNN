@@ -1,14 +1,35 @@
 import { z } from "zod";
 
+const requiredNumber = (
+  min: number,
+  max: number,
+  message: string
+) =>
+  z
+    .string()
+    .trim()
+    .min(1, `${message} is required`)
+    .transform((value) => Number(value))
+    .refine((value) => !isNaN(value), {
+      message: `${message} must be a number`,
+    })
+    .refine((value) => value >= min && value <= max, {
+      message: `${message} must be between ${min} and ${max}`,
+    });
+
 export const predictionSchema = z.object({
-  Pregnancies: z.coerce.number().min(0).max(20),
-  Glucose: z.coerce.number().min(0).max(300),
-  BloodPressure: z.coerce.number().min(0).max(200),
-  SkinThickness: z.coerce.number().min(0).max(100),
-  Insulin: z.coerce.number().min(0).max(900),
-  BMI: z.coerce.number().min(0).max(70),
-  DiabetesPedigreeFunction: z.coerce.number().min(0).max(3),
-  Age: z.coerce.number().min(1).max(120),
+  Pregnancies: requiredNumber(0, 20, "Pregnancies"),
+  Glucose: requiredNumber(0, 300, "Glucose"),
+  BloodPressure: requiredNumber(0, 200, "Blood Pressure"),
+  SkinThickness: requiredNumber(0, 100, "Skin Thickness"),
+  Insulin: requiredNumber(0, 900, "Insulin"),
+  BMI: requiredNumber(0, 70, "BMI"),
+  DiabetesPedigreeFunction: requiredNumber(
+    0,
+    3,
+    "Pedigree Function"
+  ),
+  Age: requiredNumber(1, 120, "Age"),
 });
 
 export type PredictionFormData = z.infer<typeof predictionSchema>;
